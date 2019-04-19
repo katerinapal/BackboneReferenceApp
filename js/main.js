@@ -1,17 +1,5 @@
-// Initialize and kick off the Backbone.js application
-require([
-
-	// Application core
-	'app/App',
-	'app/Controller',
-
-	// Directory sub-application
-	'directory/Controller'
-
-], function (app) {
-	"use strict";
-	app.start();
-});
+import app from ".\\app\\App.js";
+;
 
 // RequireJS configuration
 requirejs.config({
@@ -49,3 +37,5 @@ requirejs.config({
 		}
 	}
 });
+"use strict";
+app.start();

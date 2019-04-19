@@ -1,64 +1,51 @@
+import app from ".\\App.js";
 /*
 
 AppController
 
 */
 
-define([
+;
+"use strict";
 
-	// Application core
-	'app/App',
-	'app/Layout',
-	'app/Info',
+var AppController = Marionette.Controller.extend({
 
-	// Modules
-	'mods/Notification',
-	'mods/Keyboard',
-	'mods/Menus',
-	'mods/ListSearch'
+    initialize: function (options) {
 
-], function (app) {
-	"use strict";
+        // Layout regions
+        var regionHeader = app.container.currentView.header,
+            regionMain = app.container.currentView.main,
+            regionOverlay = app.container.currentView.overlay;
+        
+        app.vent.listenTo(app.vent,"overlay:close", function () {
+            regionOverlay.close();
+        });
 
-	var AppController = Marionette.Controller.extend({
+        // Hide the "loading" indicator when directory data have been loaded
+        app.vent.listenTo(app.vent,"directory:data:loaded", function () {
+            $("#app-loading").hide();
+        });
 
-		initialize: function (options) {
+        app.vent.listenTo(app.vent, "quickFilter:term:empty", function () {
+            app.execute("showIntroMsg");
+        });
 
-			// Layout regions
-			var regionHeader = app.container.currentView.header,
-				regionMain = app.container.currentView.main,
-				regionOverlay = app.container.currentView.overlay;
-			
-			app.vent.listenTo(app.vent,"overlay:close", function () {
-				regionOverlay.close();
-			});
-
-			// Hide the "loading" indicator when directory data have been loaded
-			app.vent.listenTo(app.vent,"directory:data:loaded", function () {
-				$("#app-loading").hide();
-			});
-
-			app.vent.listenTo(app.vent, "quickFilter:term:empty", function () {
-				app.execute("showIntroMsg");
-			});
-
-			app.vent.listenTo(app.vent, "quickFilter:results:yes", function () {
-				app.execute("showResultsMsg");
-			});
-				
-			app.vent.listenTo(app.vent, "quickFilter:results:no", function () {
-				app.execute("showNoResultsMsg");
-			});
-			
-		}
-
-	});
-
-	// https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.application.md#adding-initializers
-	app.addInitializer(function () {
-		var appController = new AppController();
-	});
-		
-	return AppController;
+        app.vent.listenTo(app.vent, "quickFilter:results:yes", function () {
+            app.execute("showResultsMsg");
+        });
+            
+        app.vent.listenTo(app.vent, "quickFilter:results:no", function () {
+            app.execute("showNoResultsMsg");
+        });
+        
+    }
 
 });
+
+// https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.application.md#adding-initializers
+app.addInitializer(function () {
+    var appController = new AppController();
+});
+
+var bindingVariable = AppController;
+export default bindingVariable;

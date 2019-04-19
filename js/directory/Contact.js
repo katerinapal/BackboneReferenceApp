@@ -1,3 +1,6 @@
+import bs from "..\\..\\lib\\js\\backbone-sharepoint.odata.js";
+import dirApp from ".\\App.js";
+import app from "..\\app\\App.js";
 /*
 
 This is our main model: a SharePoint contact.
@@ -9,18 +12,13 @@ be able to use something like the "schema" property used by Backbone-Forms.
 
 */
 
-define([
-	'app/App',
-	'directory/App',
-	'backbone-sharepoint'
-], function (app, dirApp, bs) {
-	"use strict";
+;
+"use strict";
 
-	// **Contact** Model - inherits its attributes from the SharePoint list
-	return Backbone.SP.Item.extend({
-		// https://github.com/lstak/Backbone.SharePoint
-		site: '/Apps',
-		list: 'EmployeeDirectory'
-	});
-
+var bindingVariable = Backbone.SP.Item.extend({
+    // https://github.com/lstak/Backbone.SharePoint
+    site: '/Apps',
+    list: 'EmployeeDirectory'
 });
+
+export default bindingVariable;

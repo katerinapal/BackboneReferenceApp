@@ -1,11 +1,4 @@
-/*
-
-Helper utility for using Handlebars with RequireJS; also a handy place
-to put Handlebars helper functions.
-
-*/
-
-define([
+var bindingVariable = define([
 	// 'moment',
 	'../lib/js/handlebars-1.0.rc.1'
 ], function(moment) {
@@ -31,3 +24,5 @@ define([
 	
 	return Handlebars;
 });
+
+export default bindingVariable;

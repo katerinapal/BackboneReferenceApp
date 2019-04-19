@@ -1,3 +1,8 @@
+import directory from ".\\Directory.js";
+import dirApp from ".\\App.js";
+import DirectoryView from ".\\DirectoryView.js";
+import app from "..\\app\\App.js";
+import ModKit from "..\\util\\ModKit.js";
 /*
 
 Initialization and workflow logic for Directory module.
@@ -12,53 +17,44 @@ Responsibilities:
 
 */
 
-define([
-	'modkit',
-	'app/App',
-	'directory/App',
-	'directory/Directory',
-	'directory/DirectoryView',
-	'directory/AddContactController',
-	'directory/EditContactController'
-], function (ModKit, app, dirApp, directory, DirectoryView) {
-	"use strict";
+;
+"use strict";
 
-	var DirectoryController = ModKit.Controller.extend();
+var DirectoryController = ModKit.Controller.extend();
 
-	/*
-	Marionette.Application.addInitializer() injects initialization code into the Application
-	(https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.application.md#adding-initializers)
-	*/
-	app.addInitializer(function () {
-		// Start Directory Application
-		dirApp.start();
-	});
+/*
+Marionette.Application.addInitializer() injects initialization code into the Application
+(https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.application.md#adding-initializers)
+*/
+app.addInitializer(function () {
+    // Start Directory Application
+    dirApp.start();
+});
 
-	dirApp.addInitializer(function () {
+dirApp.addInitializer(function () {
 
-		// Load data
-		directory.fetch({
-			orderby: 'LastName',
-			success: function () {
-				app.vent.trigger("directory:data:loaded");
-			}
-		});
+    // Load data
+    directory.fetch({
+        orderby: 'LastName',
+        success: function () {
+            app.vent.trigger("directory:data:loaded");
+        }
+    });
 
-		// Start Directory Controller
-		var directoryController = new DirectoryController()
-			.show(
-				app.container.currentView.main,
-				new DirectoryView({collection: directory})
-			);
+    // Start Directory Controller
+    var directoryController = new DirectoryController()
+        .show(
+            app.container.currentView.main,
+            new DirectoryView({collection: directory})
+        );
 
-		// Listen for the user to type in the quick-filter box and filter
-		// our collection accordingly
-		dirApp.commands.addHandler("quickFilter", function (term) {
-			directory.filter(term);
-		});
-
-	});
-
-	return DirectoryController;
+    // Listen for the user to type in the quick-filter box and filter
+    // our collection accordingly
+    dirApp.commands.addHandler("quickFilter", function (term) {
+        directory.filter(term);
+    });
 
 });
+
+var bindingVariable = DirectoryController;
+export default bindingVariable;
